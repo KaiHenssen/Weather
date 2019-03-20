@@ -63,9 +63,8 @@ public class CachedWeatherServiceTest {
         WeatherService adapter = mock(WeatherService.class);
         when(adapter.getWeather(any(Region.class), any(Day.class))).thenReturn(mock(Forecast.class));
 
-        CachedWeatherService cachedWeatherService = new CachedWeatherService(adapter, mockClock);
+        CachedWeatherService cachedWeatherService = new CachedWeatherService(adapter, mockClock, 1);
 
-        cachedWeatherService.setCacheSize(1);
 
         cachedWeatherService.getWeather(Region.LONDON, Day.SATURDAY);
 

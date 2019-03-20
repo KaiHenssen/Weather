@@ -14,11 +14,17 @@ public class CachedWeatherService implements WeatherService {
     private final InternalClock internalClock;
     private final Map<SearchKey, CacheForecast> cache = new HashMap<>();
     private final List<SearchKey> ordering = new ArrayList<>();
-    private int cacheSize = 10;
+    private final int cacheSize;
 
     public CachedWeatherService(WeatherService adapter, InternalClock internalClock) {
+        this(adapter, internalClock, 10);
+    }
+
+
+    public CachedWeatherService(WeatherService adapter, InternalClock internalClock, int cacheSize) {
         this.adapter = adapter;
         this.internalClock = internalClock;
+        this.cacheSize = cacheSize;
     }
 
     @Override
@@ -33,7 +39,6 @@ public class CachedWeatherService implements WeatherService {
         while (ordering.size() > cacheSize) {
             ordering.remove(0);
             cache.remove(sk);
-
         }
 
         if(cache.containsKey(sk) && cache.get(sk).timestamp > (internalClock.millis()-1000*60*60L)) {
@@ -46,16 +51,11 @@ public class CachedWeatherService implements WeatherService {
         return forecast;
     }
 
-    public void setCacheSize(int i) {
-        this.cacheSize = i;
-    }
-
-
     private static class SearchKey {
         Region region;
         Day day;
 
-        public SearchKey(Region region, Day day) {
+        SearchKey(Region region, Day day) {
             this.region = region;
             this.day = day;
         }
@@ -76,7 +76,7 @@ public class CachedWeatherService implements WeatherService {
     }
 
     private static class CacheForecast {
-        public CacheForecast(Forecast forecast, Long timestamp) {
+        CacheForecast(Forecast forecast, Long timestamp) {
             this.forecast = forecast;
             this.timestamp = timestamp;
         }
