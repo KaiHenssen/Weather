@@ -75,26 +75,26 @@ public class CachedWeatherServiceTest {
         verify(adapter, times(2)).getWeather(Region.LONDON, Day.SATURDAY);
     }
 
-//    @Test
-//    public void testCleaningOfCache(){
-//        WeatherService delegate = mock(WeatherService.class);
-//        InternalClock internalClock = mock(InternalClock.class);
-//
-//        when(delegate.getWeather(any(Region.class), any(Day.class))).thenReturn(mock(Forecast.class));
-//
-//        when(internalClock.millis()).thenReturn(1L);
-//
-//        CachedWeatherService cachedWeatherService = new CachedWeatherService(delegate, internalClock);
-//
-//
-//        cachedWeatherService.getWeather(Region.LONDON, Day.SATURDAY);
-//
-//        cachedWeatherService.getWeather(Region.LONDON, Day.SUNDAY);
-//
-//        when(internalClock.millis()).thenReturn(1000*60*60+1L);
-//
-//        cachedWeatherService.getWeather(Region.LONDON, Day.SATURDAY);
-//        verify(delegate, times(2)).getWeather(Region.LONDON, Day.SATURDAY);
-//
-//    }
+    @Test
+    public void testCleaningOfCache(){
+        WeatherService delegate = mock(WeatherService.class);
+        InternalClock internalClock = mock(InternalClock.class);
+
+        when(delegate.getWeather(any(Region.class), any(Day.class))).thenReturn(mock(Forecast.class));
+
+        when(internalClock.millis()).thenReturn(1L);
+
+        CachedWeatherService cachedWeatherService = new CachedWeatherService(delegate, internalClock);
+
+
+        cachedWeatherService.getWeather(Region.LONDON, Day.SATURDAY);
+
+        cachedWeatherService.getWeather(Region.LONDON, Day.SUNDAY);
+
+        when(internalClock.millis()).thenReturn(1000*60*60+1L);
+
+        cachedWeatherService.getWeather(Region.LONDON, Day.SATURDAY);
+        verify(delegate, times(2)).getWeather(Region.LONDON, Day.SATURDAY);
+
+    }
 }

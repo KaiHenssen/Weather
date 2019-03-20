@@ -36,7 +36,7 @@ public class CachedWeatherService implements WeatherService {
 
         }
 
-        if(cache.containsKey(sk)) {
+        if(cache.containsKey(sk) && cache.get(sk).timestamp > (internalClock.millis()-1000*60*60L)) {
             return cache.get(sk).forecast;
         }
         Forecast forecast = adapter.getWeather(region, day);
